@@ -6,6 +6,7 @@ local args = {
     "HE1AT8WAVE1",
     "1SPE7ED9",
     "D1AIM78YO",
+    "W1OLF8MAN3",
     "DOMI1N7A7TOR"
 }
 for i, argument in pairs(args) do
