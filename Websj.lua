@@ -2,9 +2,9 @@
 	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
 ]]
 if not game:IsLoaded() then game.Loaded:Wait() end
-local ScreenGui = Instance.new("ScreenGui")
-            local Frame = Instance.new("Frame")
-            local UIAspectRatioConstraint = Instance.new("UIAspectRatioConstraint")
+local monday = Instance.new("ScreenGui")
+            local Sumday= Instance.new("Frame")
+            local UIAspectRatioConssssiaiakskaint = Instance.new("UIAspectRatioConstraint")
             local UICorner = Instance.new("UICorner")
             local UIListLayout = Instance.new("UIListLayout")
             local TextLabel = Instance.new("TextLabel")
@@ -55,30 +55,3 @@ local TextButton_2 = Instance.new("TextButton")
             TextButton.TextSize = 41.000
             TextButton.TextWrapped = true
             
-	TextButton_2.Parent = Frame
-            TextButton_2.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-            TextButton_2.Size = UDim2.new(.5, 0, .15, 0)
-            TextButton_2.Font = Enum.Font.SourceSans
-            TextButton_2.Text = "No"
-            TextButton_2.TextColor3 = Color3.fromRGB(0, 0, 0)
-            TextButton_2.TextSize = 41.000
-            TextButton_2.TextWrapped = true
-
-            UICorner_2.CornerRadius = UDim.new(.1, 0)
-            UICorner_2.Parent = TextButton
-		UICorner_3.CornerRadius = UDim.new(.1, 0)
-            UICorner_3.Parent = TextButton_2
-            local function AnswerNo()
-ScreenGui:Destroy()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Yanwanlnwza/SmellLikeHacker/main/Animedimensions.lua"))()
-end
-local function AnswerYes()
-if identifyexecutor and identifyexecutor()~="Codex" or true then
-  loadstring(game:HttpGet("https://raw.githubusercontent.com/GalacticHypernova/Guardian/main/MainProd"))()
-else
-  loadstring(game:HttpGet("https://raw.githubusercontent.com/GalacticHypernova/Guardian/main/CodexTest"))()
-end
-AnswerNo()
-end
-            TextButton.MouseButton1Click:Once(AnswerYes)
-	TextButton_2.MouseButton1Click:Once(AnswerNo)
