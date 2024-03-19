@@ -3,12 +3,11 @@ local args = {
     "1PA8ST4A",
     "W1OLF8MAN3",
     "F1RU8I2T",
-    "A1Q8U6A",
-    "1CU8RSE5",
-    "1PA8ST4A",
-    "W1OLF8MAN3",
     "18FAM7",
-    "1SPE7ED9"
+    "ARMOR",
+    "A1Q8U6A",
+    "1AK8ARI8",
+    "LEVEL"
 }
 for i, argument in pairs(args) do
     game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("RedeemPromoCode",argument)
