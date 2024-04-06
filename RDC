@@ -9,6 +9,7 @@ local args = {
     "1AK8ARI8",
     "TRASH",
     "LEVEL",
+    "190PRIRATE",
     "SHI1NO8B9I"
 }
 for i, argument in pairs(args) do
