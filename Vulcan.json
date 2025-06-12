@@ -1,0 +1,12 @@
+[
+  {
+    "code": "1",
+    "type": "1",
+    "violated": true
+  },
+  {
+    "code": "username2",
+    "type": "password2",
+    "violated": false
+  }
+]
