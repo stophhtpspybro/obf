@@ -1,12 +1,12 @@
 [
   {
-    "code": "1",
-    "type": "1",
-    "violated": true
+    "user": "1",
+    "pass": "1",
+    "vip": true
   },
   {
-    "code": "username2",
-    "type": "password2",
-    "violated": false
+    "user": "username2",
+    "pass": "password2",
+    "vip": false
   }
 ]
