@@ -2,6 +2,7 @@ if shared.iscodea then return end
 shared.iscodea = true
 
 local Codes = {
+    "HALLOWEEN2026",
     "DEATH"
 }
 
