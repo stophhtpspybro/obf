@@ -3,6 +3,7 @@ shared.iscodea = true
 
 local Codes = {
     "HALLOWEEN2026",
+    "MINIUPDATE",
     "DEATH"
 }
 
