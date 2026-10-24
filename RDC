@@ -2,18 +2,7 @@ if shared.iscodea then return end
 shared.iscodea = true
 
 local Codes = {
-    "ARMOR",
-    "TRASH",
-    "MUSCLE",
-    "LEVEL",
-    "190PRIRATE",
-    "PSYCHO",
-    "BLUE",
-    "KING",
-    "EXTREME",
-    "DEATH",
-    "GIFT2024",
-    "3YEARS"
+    "DEATH"
 }
 
 local HttpService = game:GetService("HttpService")
@@ -46,10 +35,15 @@ local function myLevel()
     end)
     return ok and tonumber(lvl) or 0
 end
+local FAVORITE_MSG = "Like and Favorite the game to redeem this code"
+local favoriteBlocked = false
 local function pending(code)
     local response = done[code]
     if not response then
         return true
+    end
+    if response == FAVORITE_MSG then
+        return not favoriteBlocked
     end
     local req = levelReq(response)
     return req ~= nil and myLevel() >= req
@@ -63,7 +57,6 @@ local function add(code)
         table.insert(list, code)
     end
 end
-
 pcall(function()
     for _, v in ipairs(workspace.Leaderboards.MilestoneBoard.Center.Surface.ScrollingFrame:GetChildren()) do
         if v:IsA("Frame") and v:FindFirstChild("MilestoneCode") then
@@ -75,16 +68,14 @@ for _, code in ipairs(Codes) do
     add(code)
 end
 for code, response in pairs(done) do
-    if levelReq(response) then
+    if levelReq(response) or response == FAVORITE_MSG then
         add(code)
     end
 end
 
-
 local lastAccepted = -math.huge
 for _, code in ipairs(list) do
     if pending(code) then
-        task.wait(math.max(0, lastAccepted + 2.95 - os.clock()))
         local started, response = os.clock(), nil
         repeat
             local sentAt = os.clock()
@@ -94,12 +85,14 @@ for _, code in ipairs(list) do
             if ok and type(res) == "table" and res.response then
                 response, lastAccepted = tostring(res.response), sentAt
             else
-                
-                task.wait(0.15)
+                task.wait(math.max(0.15, lastAccepted + 2.95 - os.clock()))
             end
         until response or os.clock() - started > 8
         if not response then
             break
+        end
+        if response == FAVORITE_MSG then
+            favoriteBlocked = true
         end
         done[code] = response
         save()
