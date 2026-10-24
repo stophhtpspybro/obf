@@ -1,11 +1,7 @@
-if not shared.iscodea then
-local Code = {}
-                for i,v in pairs(Workspace.Leaderboards.MilestoneBoard.Center.Surface.ScrollingFrame:GetChildren()) do
-                    if v:IsA("Frame") and v.MilestoneCode.Text ~= "LOCKED" then
-                        game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("RedeemPromoCode",v.MilestoneCode.Text)
-                    end
-                end
-local args = {
+if shared.iscodea then return end
+shared.iscodea = true
+
+local Codes = {
     "ARMOR",
     "TRASH",
     "MUSCLE",
@@ -19,8 +15,62 @@ local args = {
     "GIFT2024",
     "3YEARS"
 }
-for i, argument in pairs(args) do
-    game:GetService("ReplicatedStorage").RemoteFunctions.MainRemoteFunction:InvokeServer("RedeemPromoCode",argument)
+
+local HttpService = game:GetService("HttpService")
+local MainRemoteFunction = game:GetService("ReplicatedStorage"):WaitForChild("RemoteFunctions"):WaitForChild("MainRemoteFunction")
+local userId = tostring(game.Players.LocalPlayer.UserId)
+local SAVE_FILE = "SmellLikeHacker_RedeemedCodes.json"
+
+local saved = {}
+pcall(function()
+    if isfile and isfile(SAVE_FILE) then
+        saved = HttpService:JSONDecode(readfile(SAVE_FILE))
+    end
+end)
+saved[userId] = saved[userId] or {}
+local done = saved[userId]
+local function save()
+    pcall(function()
+        if writefile then
+            writefile(SAVE_FILE, HttpService:JSONEncode(saved))
+        end
+    end)
 end
-shared.iscodea = true
+
+local list, seen = {}, {}
+local function add(code)
+    code = tostring(code)
+    if code ~= "" and code ~= "LOCKED" and not seen[code] then
+        seen[code] = true
+        table.insert(list, code)
+    end
+end
+
+pcall(function()
+    for _, v in ipairs(workspace.Leaderboards.MilestoneBoard.Center.Surface.ScrollingFrame:GetChildren()) do
+        if v:IsA("Frame") and v:FindFirstChild("MilestoneCode") then
+            add(v.MilestoneCode.Text)
+        end
+    end
+end)
+for _, code in ipairs(Codes) do
+    add(code)
+end
+
+for _, code in ipairs(list) do
+    if not done[code] then
+        for _ = 1, 5 do
+            local ok, res = pcall(function()
+                return MainRemoteFunction:InvokeServer("RedeemPromoCode", code)
+            end)
+            if ok and type(res) == "table" and res.response then
+                done[code] = tostring(res.response)
+                save()
+                print("[RedeemCode] " .. code .. ": " .. tostring(res.response))
+                break
+            end
+            task.wait(1)
+        end
+        task.wait(3.5)
+    end
 end
