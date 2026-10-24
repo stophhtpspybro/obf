@@ -1,7 +1,6 @@
 if shared.iscodea then return end
 shared.iscodea = true
 
--- เพิ่มโค้ดใหม่ตรงนี้
 local Codes = {
     "ARMOR",
     "TRASH",
