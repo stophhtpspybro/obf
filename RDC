@@ -1,6 +1,7 @@
 if shared.iscodea then return end
 shared.iscodea = true
 
+-- เพิ่มโค้ดใหม่ตรงนี้
 local Codes = {
     "ARMOR",
     "TRASH",
@@ -37,6 +38,24 @@ local function save()
     end)
 end
 
+local function levelReq(response)
+    return tonumber(tostring(response):match("Must be Level (%d+)"))
+end
+local function myLevel()
+    local ok, lvl = pcall(function()
+        return game.Players.LocalPlayer.leaderstats.Level.Value
+    end)
+    return ok and tonumber(lvl) or 0
+end
+local function pending(code)
+    local response = done[code]
+    if not response then
+        return true
+    end
+    local req = levelReq(response)
+    return req ~= nil and myLevel() >= req
+end
+
 local list, seen = {}, {}
 local function add(code)
     code = tostring(code)
@@ -56,21 +75,35 @@ end)
 for _, code in ipairs(Codes) do
     add(code)
 end
+for code, response in pairs(done) do
+    if levelReq(response) then
+        add(code)
+    end
+end
 
+
+local lastAccepted = -math.huge
 for _, code in ipairs(list) do
-    if not done[code] then
-        for _ = 1, 5 do
+    if pending(code) then
+        task.wait(math.max(0, lastAccepted + 2.95 - os.clock()))
+        local started, response = os.clock(), nil
+        repeat
+            local sentAt = os.clock()
             local ok, res = pcall(function()
                 return MainRemoteFunction:InvokeServer("RedeemPromoCode", code)
             end)
             if ok and type(res) == "table" and res.response then
-                done[code] = tostring(res.response)
-                save()
-                print("[RedeemCode] " .. code .. ": " .. tostring(res.response))
-                break
+                response, lastAccepted = tostring(res.response), sentAt
+            else
+                
+                task.wait(0.15)
             end
-            task.wait(1)
+        until response or os.clock() - started > 8
+        if not response then
+            break
         end
-        task.wait(3.5)
+        done[code] = response
+        save()
+        print("[RedeemCode] " .. code .. ": " .. response)
     end
 end
